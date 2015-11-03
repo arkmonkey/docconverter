@@ -8,7 +8,7 @@
 
         protected void RaiseFileChangedEvent(string fileName)
         {
-            FileChanged(fileName);
+            if(FileChanged != null) { FileChanged(fileName); }
         }
     }
 }

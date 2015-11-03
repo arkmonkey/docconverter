@@ -12,6 +12,7 @@ namespace FileConverter.Watcher
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += OnChanged;
             watcher.EnableRaisingEvents = true;
+            watcher.IncludeSubdirectories = false;
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
