@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using FileConverter.Watcher;
+
 
 namespace FileConverter.ConsoleTester
 {
@@ -21,21 +21,14 @@ namespace FileConverter.ConsoleTester
                 return;
             }
 
-            _outputDir = args[0] + (args[0].EndsWith("\\") ? "" : "\\") + "output\\";
-            if (!Directory.Exists(_outputDir)) { Directory.CreateDirectory(_outputDir); }
-            DirectoryWatcher watcher = new DirectoryWatcher(args[0]);
-            watcher.FileChanged += WatcherOnFileChanged;
+            //_outputDir = args[0] + (args[0].EndsWith("\\") ? "" : "\\") + "output\\";
+            //if (!Directory.Exists(_outputDir)) { Directory.CreateDirectory(_outputDir); }
+            //DirectoryWatcher watcher = new DirectoryWatcher(args[0]);
+            //watcher.FileChanged += WatcherOnFileChanged;
 
-            Console.WriteLine("Watching... <ctrl+c> to cancel");
-            Console.ReadLine();
+            //Console.WriteLine("Watching... <ctrl+c> to cancel");
+            //Console.ReadLine();
         }
 
-        private static void WatcherOnFileChanged(string fileName)
-        {
-            string outputFileName = Path.Combine(_outputDir, Path.GetFileNameWithoutExtension(fileName) + ".png");
-            Converter.Converter converter = new Converter.Converter(fileName, outputFileName);
-            
-            converter.Convert();
-        }
     }
 }

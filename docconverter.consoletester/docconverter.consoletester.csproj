@@ -7,8 +7,8 @@
     <ProjectGuid>{9F3BBE23-3D7F-48D3-AFD7-BAE2A236FB55}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileConverter.ConsoleTester</RootNamespace>
-    <AssemblyName>FileConverter.ConsoleTester</AssemblyName>
+    <RootNamespace>docconverter.consoletester</RootNamespace>
+    <AssemblyName>docconverter.consoletester</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>

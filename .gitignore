@@ -1,6 +1,7 @@
+*.suo
+*.user
+packages/
 docconverterlib/obj/
 docconverterlib/bin/
-*.suo
 docconverter.consoletester/bin/
-*.user
 docconverter.consoletester/obj/
