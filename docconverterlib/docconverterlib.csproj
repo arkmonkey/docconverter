@@ -90,10 +90,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConversionFile.cs" />
     <Compile Include="ConverterApiBase.cs" />
     <Compile Include="ConverterApiFactory.cs" />
-    <Compile Include="ConverterFile.cs" />
+    <Compile Include="GhostScriptConverter.cs" />
     <Compile Include="GoogleDriveApi.cs" />
+    <Compile Include="Hash.cs" />
     <Compile Include="IConverterApi.cs" />
     <Compile Include="MimeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

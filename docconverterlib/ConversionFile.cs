@@ -1,10 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 
 namespace docconverterlib
 {
-    public class ConverterFile
+    public class ConversionFile
     {
         public enum FileType
         {
@@ -15,7 +14,7 @@ namespace docconverterlib
         private Stream _stream;
         private string _path;
 
-        public ConverterFile()
+        public ConversionFile()
         {
             Type = FileType.Local;
             Path = string.Empty;
@@ -24,9 +23,9 @@ namespace docconverterlib
 
         public Guid RowId { get; set; }             //The database identity field
 
-        public string GetHash()
+        public string GetHashBasedOfRowId()
         {
-            return Convert.ToBase64String(RowId.ToByteArray()); 
+            return Hash.GetEncodedHash(this.RowId);
         }
 
         public string Path
@@ -34,8 +33,8 @@ namespace docconverterlib
             get { return _path; }
             set
             {
-                _path = value; 
-                
+                _path = value;
+
                 //update mime type
                 var ext = System.IO.Path.GetExtension(this.Path);
                 if (!string.IsNullOrWhiteSpace(ext))
@@ -47,17 +46,16 @@ namespace docconverterlib
         }
 
         public FileType Type { get; set; }
-        
+
 
         public string FileName
         {
             get { return System.IO.Path.GetFileName(this.Path); }
         }
 
-
         public string MimeType { get; set; }
 
-        public Stream GetStream ()
+        public Stream GetStream()
         {
             return _stream ?? (_stream = InternalGetStream());
         }
@@ -74,7 +72,7 @@ namespace docconverterlib
 
         #region static method/s
 
-        public static ConverterFile SaveAs(Stream stream, string path)
+        public static ConversionFile SaveAs(Stream stream, string path)
         {
             try
             {
@@ -83,14 +81,14 @@ namespace docconverterlib
                     stream.Seek(0, SeekOrigin.Begin);
                     stream.CopyTo(fileStream);
                 }
-                ConverterFile f = new ConverterFile
+                ConversionFile f = new ConversionFile
                 {
                     Path = path,
                     Type = FileType.Local
                 };
                 return f;
             }
-// ReSharper disable once RedundantCatchClause
+            // ReSharper disable once RedundantCatchClause
             catch (Exception ex)
             {
                 //TODO: log File.SaveAs errors

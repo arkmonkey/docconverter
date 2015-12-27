@@ -19,17 +19,17 @@ namespace docconverterlib
         private readonly string[] _scopes = {DriveService.Scope.DriveFile};
         private readonly string _appName = "";
         private readonly string _user = "user";
-        private readonly string _clientSecretPath;
+        private readonly string _privateKeyPath;
 
         
 
         
         
 
-        internal GoogleDriveApi(string appName, string clientSecretPath = "")
+        internal GoogleDriveApi(string appName, string privateKeyPath = "")
         {
             _appName = appName;
-            _clientSecretPath = clientSecretPath;
+            _privateKeyPath = privateKeyPath;
         }
 
         public File UploadFile(Stream stream, string remoteFilename, string mimeType, bool convert = false, string folderId = "")
@@ -82,16 +82,16 @@ namespace docconverterlib
             {
                 if (_service == null)
                 {
-                    _service = InstantiateService(_appName, _clientSecretPath, _user, _scopes);
+                    _service = InstantiateService(_appName, _privateKeyPath, _user, _scopes);
                 }
                 return _service;
             }
         }
-        private static DriveService InstantiateService(string appName, string clientSecretPath, string user, string[] scopes)
+        private static DriveService InstantiateService(string appName, string privateKeyPath, string user, string[] scopes)
         {
             UserCredential credential;
             using (var stream =
-                new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
+                new FileStream(privateKeyPath, FileMode.Open, FileAccess.Read))
             {
                 string credPath = System.Environment.GetFolderPath(
                     System.Environment.SpecialFolder.Personal);
@@ -121,12 +121,8 @@ namespace docconverterlib
         }
 
         #region IConverterApi
-        /// <summary>
-        /// Note that the output of this is a PDF file.  So, after wards, this still needs to be processed by 
-        /// the Orchestrator (using GhostScript this time), but that is outside of this class' responsibility
-        /// </summary>
-        /// <param name="toBeConverted"></param>
-        public override void Execute(ConverterFile toBeConverted)
+
+        public override void Execute(ConversionFile toBeConverted)
         {
             File file = this.UploadFile(toBeConverted.GetStream(), toBeConverted.FileName, toBeConverted.MimeType, true);
             Stream stream = this.DownloadPdf(file.Id);
@@ -137,9 +133,9 @@ namespace docconverterlib
                 var dir = Path.GetDirectoryName(toBeConverted.Path);
                 if (!string.IsNullOrWhiteSpace(dir))
                 {
-                    var output = ConverterFile.SaveAs(stream,
+                    var output = ConversionFile.SaveAs(stream,
                     Path.Combine(dir, Path.GetFileNameWithoutExtension(toBeConverted.Path) + ".pdf"));
-                    Callback(toBeConverted, new List<ConverterFile>(new[] { output }).AsEnumerable());
+                    Callback(toBeConverted, new List<ConversionFile>(new[] { output }).AsEnumerable());
                 }
                 
             }

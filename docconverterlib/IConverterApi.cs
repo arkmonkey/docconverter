@@ -6,7 +6,7 @@ namespace docconverterlib
 {
     public interface IConverterApi
     {
-        void Execute(ConverterFile toBeConverted);
-        Action<ConverterFile, IEnumerable<ConverterFile>> Callback { get; set; }
+        void Execute(ConversionFile toBeConverted);
+        Action<ConversionFile, IEnumerable<ConversionFile>> Callback { get; set; }
     }
 }

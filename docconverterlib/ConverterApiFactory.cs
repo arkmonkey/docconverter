@@ -1,13 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
 
 namespace docconverterlib
 {
+    /// <summary>
+    /// This class returns references to various file format converters.
+    /// 
+    /// * the google api converter needs a "myprivatekey.p12" file located at the domain's root dir.
+    /// This is obtained from your google accounts developer console service account creation page.
+    /// </summary>
     public class ConverterApiFactory
     {
+        private readonly string _rootOutputPath;
+        
+        public ConverterApiFactory(string rootOutputPath)
+        {
+            _rootOutputPath = rootOutputPath;
+        }
+
         public IConverterApi GetConverterApi(
             string fileExtension)
         {
@@ -19,22 +29,32 @@ namespace docconverterlib
 
             switch (fileExtension)
             {
+                case "doc":
                 case "docx":
+                case "xls":
+                case "xlsx":
                     return GetGoogleDriveApi();
+                case "pdf":
+                    return GetGhostScriptApi();
                 default:
                     //TODO: error-log when it reaches this file extension
                     throw new Exception("file not supported at the moment");
             }
         }
 
-        protected GoogleDriveApi GetGoogleDriveApi()
+        internal GoogleDriveApi GetGoogleDriveApi()
         {
-            const string appName = "malzahar";
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "client_secret.json");
+            const string appName = "docconverter";
 
-            GoogleDriveApi driveApi = new GoogleDriveApi(appName, path);  //TODO: Is this really hardcoded?
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "myprivatekey.p12");
+            GoogleDriveApi driveApi = new GoogleDriveApi(appName, path);
 
             return driveApi;
+        }
+
+        internal GhostScriptConverter GetGhostScriptApi()
+        {
+            return new GhostScriptConverter(_rootOutputPath);
         }
 
         #region Helpers
